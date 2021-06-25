@@ -1,0 +1,17 @@
+En el archivo config introduciremos los datos para conectar con la base de datos. Para ello crearemos un json así:
+
+{
+    "conexion":{
+        "server" : "localhost",
+        "user" : "root",
+        "password" : "",
+        "database" : "apirest",
+        "port": "3306"
+    }
+} 
+
+En el server pondremos el nombre del servidor o la dirección ip. En este caso como accedemos por XAMPP será localhost.
+En el user pondremos el usuario de acceso.
+En el password la contraseña que tiene el usuario.
+En database el nombre de la base de datos a la que queremos acceder.
+En port pondremos el puerto necesario. En este caso, como usamos XAMPP, el puerto será 3306.
