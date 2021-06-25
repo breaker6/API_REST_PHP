@@ -7,7 +7,7 @@ class conexion {
     private $password;
     private $database;
     private $port;
-    //
+    //En el atributo conexión guardaremos los datos para conectar. Variaran en función del tipo de base de datos
     private $conexion;
 
     //Este es el consturctor de la clase
