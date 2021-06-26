@@ -1,15 +1,17 @@
 <?php
 
+//La idea será que la respuesta que recibamos venga en un array con dos campos
+//El primer campo es el status, que podrá contener ok o error
+//El segundo campo es result, que será otro array que nos dará un id y un mensaje con mas información
 class respuestas {
 
-//La idea será que la respuesta que recibamos venga en un array con dos campos, uno con el codigo de error
-//y el otro campo con un mensaje mas específico
-public  $response = [
+	//Por defecto, estará en ok
+	public  $response = [
         'status' => "ok",
         "result" => array()
     ];
 
-
+    //Listamos todos los posibles errores que pueden ocurrir
     public function error_405(){
         $this->response['status'] = "error";
         $this->response['result'] = array(
