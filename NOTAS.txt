@@ -11,3 +11,10 @@ $this->conexion = new mysqli($this->server,$this->user,$this->password,$this->da
 Ese tipo de conexion solo valdrá en el caso de que la base de datos sea
 mysql. Si es de otro tipo, tendrás que consultar la documentacion de php para
 ver como realizar esta conexión.
+
+
+
+
+
+En las tablas de la base de datos a los que ataquemos, los id de las tablas
+deberán de ser enteros auto incrementales.
