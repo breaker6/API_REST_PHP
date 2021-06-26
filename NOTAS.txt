@@ -1,0 +1,13 @@
+Esta API Rest está escrita en PHP sin usar ningún tipo de framework, lo que
+le permite ser facilmente escalable a la mayoria de sistemas. Para adaptarla,
+será necesario hacer unas modificaciones que redactaré a continuación:
+
+- En clases/conexion/config será necesario editar los datos de conexión por los
+de la base de datos que necesitemos o vayamos a usar. Ahora están preparados
+para ser usados en local en XAMPP.
+
+- En clases/conexion/conexion.php tendremos que buscar está linea:
+$this->conexion = new mysqli($this->server,$this->user,$this->password,$this->database,$this->port);
+Ese tipo de conexion solo valdrá en el caso de que la base de datos sea
+mysql. Si es de otro tipo, tendrás que consultar la documentacion de php para
+ver como realizar esta conexión.
