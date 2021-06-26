@@ -73,9 +73,9 @@ class conexion {
         return $this->conexion->affected_rows;
     }
 
-    //Funcion para ejecutar consulta y devolver el id de la fila afectada. Si no ha hecho cambios, devuelve 0
-    public function nonQueryId($sqlstr){
-        $results = $this->conexion->query($sqlstr);
+    //Funcion para ejecutar consulta y devolver el id de la fila afectada. Si no ha hecho cambios, devuelve 0. NOTA: El id de la tabla debe de ser auto incremental
+    public function nonQueryId($sqlstring){
+        $results = $this->conexion->query($sqlstring);
          $filas = $this->conexion->affected_rows;
          if($filas >= 1){
             return $this->conexion->insert_id;
