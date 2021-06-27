@@ -12,7 +12,15 @@ Ese tipo de conexion solo valdrá en el caso de que la base de datos sea
 mysql. Si es de otro tipo, tendrás que consultar la documentacion de php para
 ver como realizar esta conexión.
 
-
+- En clases/auth.class.php serán necesarios varios cambios. La función login esta pensada para recibir un
+json con este formato:
+{
+	"usuario":"usuario@gmail.com",
+    "password":"aaaaa"
+}
+Si se recibiese un json distinto, habría que modificar esta función modificando $datos['usuario']
+y $datos['password'] escribiendo en lugar de usuario y password los nombres de los valores del json recibido en todos los lugares donde aparecen.
+En la función obtenerDatosUsuario la consulta que se guarda en $query deberá de estar adaptada a la tabla que se quiera usar para hacer el login y al dato que se quiera usar para autentificar. En este caso se usa con un email, pero podría usarse con el nombre de usuario siempre y cuando fuese lo que recibieramos en el json.
 
 
 
