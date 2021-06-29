@@ -20,7 +20,12 @@ json con este formato:
 }
 Si se recibiese un json distinto, habría que modificar esta función modificando $datos['usuario']
 y $datos['password'] escribiendo en lugar de usuario y password los nombres de los valores del json recibido en todos los lugares donde aparecen.
+
+La comprobacion que se hace en if($datos[0]['estado'] == "Activo"){ se debe a que en la tabla de usuarios hay una columna llamada estado en la que guardamos un string, y en el ejemplo hemos elegido guardar Activo o Inactivo. Si se quiere verificar si un usuario esta activo o no de otra manera, habrá que cambiar dicha comparación. Por ejemplo, si dejar ese campo en blanco significa que el usuario está activo, habría que cambiar dicha linea por esta: if($datos[0]['estado'] == ""){
+
 En la función obtenerDatosUsuario la consulta que se guarda en $query deberá de estar adaptada a la tabla que se quiera usar para hacer el login y al dato que se quiera usar para autentificar. En este caso se usa con un email, pero podría usarse con el nombre de usuario siempre y cuando fuese lo que recibieramos en el json.
+
+Em ña función insertarToken el insert que se hace esta adaptado para introducir datos en una tabla con los campos: id (el id del token. Autoincremental), usuarioId (el usuario al que pertenece el token), token (el token generado), estado (que debe ser Activo) y fecha (que será la fecha en la que se hace el insert). En el caso de que la tabla de los token sea distinta, habría que modificar el INSERT de esta funcíón.
 
 
 

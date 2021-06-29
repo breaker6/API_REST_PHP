@@ -84,6 +84,12 @@ class conexion {
          }
     }
 
+    //Funcion para encriptar el string que recibimos y devolverlo
+    protected function encriptar($string){
+        //La función md5() permite encriptar el string
+        return md5($string);
+    }
+
 }
 
 ?>
