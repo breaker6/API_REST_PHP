@@ -9,7 +9,7 @@ class usuarios extends conexion {
     private $nombre = "";
     private $email = "";
     private $estado = "";
-    private $token = "";
+    private $token = ""; //Token
 
     //Funcion para listar usuarios. El numero de pagina delimitará cuantos se imprimen (de 100 en 100)
     public function listaUsuarios($pagina = 1){
@@ -39,12 +39,13 @@ class usuarios extends conexion {
         $datos = json_decode($json,true);
 
         //Si no hemos recibido el token, daremos un error
-        /*if(!isset($datos['token'])){
-                return $_respuestas->error_401();
+        //NOTA: Podriamos omitir la comprobación del token. Para ello, habría que comentar desde la siguiente linea hasta if($arrayToken){ y sus cierres mas abajo
+        if(!isset($datos['token'])){
+            return $_respuestas->error_401();
         }else{
             $this->token = $datos['token'];
             $arrayToken =   $this->buscarToken();
-            if($arrayToken){*/
+            if($arrayToken){
                 //Comprobamos si hemos recibido los datos requeridos. Si no, daremos un error
                 if(!isset($datos['nombre']) || !isset($datos['email'])){
                     return $_respuestas->error_400();
@@ -71,11 +72,11 @@ class usuarios extends conexion {
                         return $_respuestas->error_500();
                     }
                 }
-
-            /*}else{
+            //else de if($arrayToken){
+            }else{
                 return $_respuestas->error_401("El Token que envio es invalido o ha caducado");
             }
-        } */
+        }//else de if(!isset($datos['token'])){
     }
     
     //Funcion que hará la inserción del usuario y devolvera el id del usuario insertado
@@ -97,14 +98,16 @@ class usuarios extends conexion {
         //Convertimos los datos recibidos en un array asociativo
         $datos = json_decode($json,true);
 
-        /*if(!isset($datos['token'])){
+        //Si no hemos recibido el token, daremos un error
+        //NOTA: Podriamos omitir la comprobación del token. Para ello, habría que comentar desde la siguiente linea hasta if($arrayToken){ y sus cierres mas abajo
+        if(!isset($datos['token'])){
             return $_respuestas->error_401();
         }else{
             //Si hemos recibido el token, lo buscaremos con la función buscarToken
             $this->token = $datos['token'];
             $arrayToken =   $this->buscarToken();
             //Si el token existe en la tabla, seguimos
-            if($arrayToken){*/
+            if($arrayToken){
                 //Si no hemos recibido el id, daremos un error
                 if(!isset($datos['id'])){
                     return $_respuestas->error_400();
@@ -124,7 +127,7 @@ class usuarios extends conexion {
                     
                     //Ejecutamos la modificacion del usuario
                     $resp = $this->modificarUsuario();
-                    
+                   
                     //Si hemos recibido respuesta, es que ha ido todo bien. Devolvemos el OK
                     if(isset($resp)){
                         $respuesta = $_respuestas->response;
@@ -136,27 +139,47 @@ class usuarios extends conexion {
                         return $_respuestas->error_500();
                     }
                 }
-
-            /*}else{
+            //else de if($arrayToken){
+            }else{
                 return $_respuestas->error_401("El Token que envio es invalido o ha caducado");
             }
-        }*/
+        }//else de if(!isset($datos['token'])){
     }
 
     //Funcion que hará la modificación del usuario y devolvera el numero de filas afectadas
     private function modificarUsuario(){
+        //Creamos la variable auxiliar $primeraCondicion que nos ayudara a construir la sql
+        $primeraCondicion = true;
         //Este UPDATE comentado funcionaría si tenemos en cuenta que todos los campos son obligatorios
         //$query = "UPDATE " . $this->table . " SET nombre ='" . $this->nombre . "', email = '" . $this->email . "', estado = '" . $this->estado .
         //Este UPDATE es el que permite modificar solo unos campos y dejar los no rellenados como están
         $query = "UPDATE " . $this->table . " SET ";
         if ($this->nombre != ""){
+            if (!$primeraCondicion){
+                $query.=",";
+            }
+            else{
+                $primeraCondicion = false;
+            }
             $query .= "nombre ='" . $this->nombre . "'";
         }
         if ($this->email != ""){
-            $query .= ", email ='" . $this->email . "'";
+            if (!$primeraCondicion){
+                $query.=",";
+            }
+            else{
+                $primeraCondicion = false;
+            }
+            $query .= "email ='" . $this->email . "'";
         }
         if ($this->estado != ""){
-            $query .= ", estado ='" . $this->estado . "'";
+            if (!$primeraCondicion){
+                $query.=",";
+            }
+            else{
+                $primeraCondicion = false;
+            }
+            $query .= "estado ='" . $this->estado . "'";
         }
         $query.= " WHERE id = '" . $this->usuarioid . "'"; 
         $resp = parent::nonQuery($query);
@@ -175,12 +198,14 @@ class usuarios extends conexion {
         //Convertimos los datos recibidos en un array asociativo
         $datos = json_decode($json,true);
 
-        /*if(!isset($datos['token'])){
+        //Si no hemos recibido el token, daremos un error
+        //NOTA: Podriamos omitir la comprobación del token. Para ello, habría que comentar desde la siguiente linea hasta if($arrayToken){ y sus cierres mas abajo
+        if(!isset($datos['token'])){
             return $_respuestas->error_401();
         }else{
             $this->token = $datos['token'];
             $arrayToken =   $this->buscarToken();
-            if($arrayToken){*/
+            if($arrayToken){
 
                 //Si no hemos recibido el id, daremos un error
                 if(!isset($datos['id'])){
@@ -202,11 +227,11 @@ class usuarios extends conexion {
                         return $_respuestas->error_500();
                     }
                 }
-
-            /*}else{
+            //else de if($arrayToken){
+            }else{
                 return $_respuestas->error_401("El Token que envio es invalido o ha caducado");
             }
-        }  */
+        }//else de if(!isset($datos['token'])){ 
     }
 
     //Función que eliminará al usuario y devolverá su id
@@ -220,6 +245,7 @@ class usuarios extends conexion {
         }
     }
 
+    //Funcion que permite buscar el token recibido para ver si existe o esta inactivo
     private function buscarToken(){
         $query = "SELECT  id,usuarioId,estado from usuarios_token WHERE token = '" . $this->token . "' AND Estado = 'Activo'";
         $resp = parent::obtenerDatos($query);
@@ -230,6 +256,7 @@ class usuarios extends conexion {
         }
     }
 
+    //Funcion que permite actualizar el token
     private function actualizarToken($tokenid){
         $date = date("Y-m-d H:i");
         $query = "UPDATE usuarios_token SET fecha = '$date' WHERE id = '$tokenid' ";
