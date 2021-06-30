@@ -65,7 +65,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET"){
 
 }else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
-        $headers = getallheaders();
+        /*$headers = getallheaders();
         if(isset($headers["token"]) && isset($headers["pacienteId"])){
             //recibimos los datos enviados por el header
             $send = [
@@ -73,12 +73,12 @@ if($_SERVER['REQUEST_METHOD'] == "GET"){
                 "pacienteId" =>$headers["pacienteId"]
             ];
             $postBody = json_encode($send);
-        }else{
-            //recibimos los datos enviados
+        }else{*/
+            //Guardamos los datos recibidos en $postBody
             $postBody = file_get_contents("php://input");
-        }
+        //}
         
-        //enviamos datos al manejador
+        //Mandamos los datos a la funcion delete de usuarios.class.php
         $datosArray = $_usuarios->delete($postBody);
         //delvovemos una respuesta 
         header('Content-Type: application/json');

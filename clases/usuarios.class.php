@@ -170,22 +170,29 @@ class usuarios extends conexion {
     }
 
     public function delete($json){
+        //Instanciamos la clase respuestas
         $_respuestas = new respuestas;
+        //Convertimos los datos recibidos en un array asociativo
         $datos = json_decode($json,true);
 
-        if(!isset($datos['token'])){
+        /*if(!isset($datos['token'])){
             return $_respuestas->error_401();
         }else{
             $this->token = $datos['token'];
             $arrayToken =   $this->buscarToken();
-            if($arrayToken){
+            if($arrayToken){*/
 
+                //Si no hemos recibido el id, daremos un error
                 if(!isset($datos['id'])){
                     return $_respuestas->error_400();
+                //Si tenemos el id, verificaremos el resto de campos que hemos recibido 
                 }else{
-                    $this->pacienteid = $datos['id'];
-                    $resp = $this->eliminarPaciente();
-                    if($resp){
+                    $this->usuarioid = $datos['id'];
+                    //Ejecutamos la eliminación del usuario
+                    $resp = $this->eliminarUsuario();
+                    
+                    //Si hemos recibido respuesta, es que ha ido todo bien. Devolvemos el OK
+                    if(isset($resp)){
                         $respuesta = $_respuestas->response;
                         $respuesta["result"] = array(
                             "usuarioId" => $this->usuarioid
@@ -196,13 +203,14 @@ class usuarios extends conexion {
                     }
                 }
 
-            }else{
+            /*}else{
                 return $_respuestas->error_401("El Token que envio es invalido o ha caducado");
             }
-        }  
+        }  */
     }
 
-    private function eliminarPaciente(){
+    //Función que eliminará al usuario y devolverá su id
+    private function eliminarUsuario(){
         $query = "DELETE FROM " . $this->table . " WHERE id= '" . $this->usuarioid . "'";
         $resp = parent::nonQuery($query);
         if($resp >= 1 ){
