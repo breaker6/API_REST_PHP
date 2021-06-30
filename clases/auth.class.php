@@ -11,13 +11,13 @@ class auth extends conexion{
         $_respuestas = new respuestas;
         //Convertimos el json recibido en un array
         $datos = json_decode($json,true);
-        //Verificamos si hemos recibido el campo usuario y password en el json
-        if(!isset($datos['usuario']) || !isset($datos["password"])){
+        //Verificamos si hemos recibido el campo email y password en el json
+        if(!isset($datos['email']) || !isset($datos["password"])){
             //error con los campos
             return $_respuestas->error_400();
         }else{
             //todo esta bien. Guardamos los datos recibidos
-            $usuario = $datos['usuario'];
+            $usuario = $datos['email'];
             $password = $datos['password'];
             //La contraseña en la base de datos está encriptada. Para comprobar que son iguales, tendremos
             //que encriptar la que hemos recibido. Usaremos el metodo encriptar que está en
