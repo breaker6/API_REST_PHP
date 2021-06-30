@@ -8,6 +8,7 @@ class usuarios extends conexion {
     private $usuarioid = "";
     private $nombre = "";
     private $email = "";
+    private $estado = "";
     private $token = "";
 
     //Funcion para listar usuarios. El numero de pagina delimitará cuantos se imprimen (de 100 en 100)
@@ -81,6 +82,7 @@ class usuarios extends conexion {
     private function insertarUsuario(){
         $query = "INSERT INTO " . $this->table . " (nombre,email) values ('" . $this->nombre ."','" . $this->email . "')"; 
         $resp = parent::nonQueryId($query);
+        
         if($resp){
              return $resp;
         }else{
@@ -88,26 +90,31 @@ class usuarios extends conexion {
         }
     }
     
+    //Funcion que gestiona las modificaciones en base de datos
     public function put($json){
+        //Instanciamos la clase respuestas
         $_respuestas = new respuestas;
+        //Convertimos los datos recibidos en un array asociativo
         $datos = json_decode($json,true);
 
-        if(!isset($datos['token'])){
+        /*if(!isset($datos['token'])){
             return $_respuestas->error_401();
         }else{
             //Si hemos recibido el token, lo buscaremos con la función buscarToken
             $this->token = $datos['token'];
             $arrayToken =   $this->buscarToken();
             //Si el token existe en la tabla, seguimos
-            if($arrayToken){
+            if($arrayToken){*/
                 //Si no hemos recibido el id, daremos un error
                 if(!isset($datos['id'])){
                     return $_respuestas->error_400();
-                //Si tenemos el id, verificaremos el resto de campos que queramos que sean obligatorios
+                //Si tenemos el id, verificaremos el resto de campos que hemos recibido
                 }else{
                     $this->usuarioid = $datos['id'];
                     if(isset($datos['nombre'])) { $this->nombre = $datos['nombre']; }
-                    if(isset($datos['email'])) { $this->correo = $datos['correo']; }
+                    if(isset($datos['email'])) { $this->email = $datos['email']; }
+                    if(isset($datos['estado'])) { $this->estado = $datos['estado']; }
+                    //Todos los campos comentados son campos de ejemplo
                     //if(isset($datos['dni'])) { $this->dni = $datos['dni']; }
                     //if(isset($datos['telefono'])) { $this->telefono = $datos['telefono']; }
                     //if(isset($datos['direccion'])) { $this->direccion = $datos['direccion']; }
@@ -115,10 +122,11 @@ class usuarios extends conexion {
                     //if(isset($datos['genero'])) { $this->genero = $datos['genero']; }
                     //if(isset($datos['fechaNacimiento'])) { $this->fechaNacimiento = $datos['fechaNacimiento']; }
                     
-                    //Si llegamos hasta aquí es que esta todo bien. Modificamos el usuario
+                    //Ejecutamos la modificacion del usuario
                     $resp = $this->modificarUsuario();
-                    //Si hemos recibido respuesta, es que esta todo bien
-                    if($resp){
+                    
+                    //Si hemos recibido respuesta, es que ha ido todo bien. Devolvemos el OK
+                    if(isset($resp)){
                         $respuesta = $_respuestas->response;
                         $respuesta["result"] = array(
                             "id" => $this->usuarioid
@@ -129,16 +137,31 @@ class usuarios extends conexion {
                     }
                 }
 
-            }else{
+            /*}else{
                 return $_respuestas->error_401("El Token que envio es invalido o ha caducado");
             }
-        }
+        }*/
     }
 
+    //Funcion que hará la modificación del usuario y devolvera el numero de filas afectadas
     private function modificarUsuario(){
-        $query = "UPDATE " . $this->table . " SET nombre ='" . $this->nombre . "', email = '" . $this->email .
-         "' WHERE id = '" . $this->usuarioid . "'"; 
+        //Este UPDATE comentado funcionaría si tenemos en cuenta que todos los campos son obligatorios
+        //$query = "UPDATE " . $this->table . " SET nombre ='" . $this->nombre . "', email = '" . $this->email . "', estado = '" . $this->estado .
+        //Este UPDATE es el que permite modificar solo unos campos y dejar los no rellenados como están
+        $query = "UPDATE " . $this->table . " SET ";
+        if ($this->nombre != ""){
+            $query .= "nombre ='" . $this->nombre . "'";
+        }
+        if ($this->email != ""){
+            $query .= ", email ='" . $this->email . "'";
+        }
+        if ($this->estado != ""){
+            $query .= ", estado ='" . $this->estado . "'";
+        }
+        $query.= " WHERE id = '" . $this->usuarioid . "'"; 
         $resp = parent::nonQuery($query);
+
+        //Devolvemos el número de filas afectadas
         if($resp >= 1){
              return $resp;
         }else{

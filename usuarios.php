@@ -7,6 +7,7 @@ $_respuestas = new respuestas;
 $_usuarios = new usuarios;//Instanciaremos la clase a la que hemos hecho referencia antes
 
 //Comprobamos el tipo de metodo que estamos recibiendo
+//El metodo GET se utiliza para consultar datos guardados
 if($_SERVER['REQUEST_METHOD'] == "GET"){
     //Comprobamos si hemos recibido el numero de paginas a imprimir
     if(isset($_GET["page"])){
@@ -28,13 +29,31 @@ if($_SERVER['REQUEST_METHOD'] == "GET"){
         http_response_code(200);
     }
     //NOTA: Si no hemos recibido ninguno de los dos parámetros, no hará nada
-    
+
+//El metodo POST se utiliza para escribir en la base de datos 
 }else if($_SERVER['REQUEST_METHOD'] == "POST"){
     //Guardamos los datos recibidos en $postBody
     $postBody = file_get_contents("php://input");
     //Mandamos los datos a la funcion post de usuarios.class.php
     $datosArray = $_usuarios->post($postBody);
-    //delvovemos una respuesta 
+    //Devolvemos un json con la respuesta tanto si hay ido bien como si no
+    header('Content-Type: application/json');
+    if(isset($datosArray["result"]["error_id"])){
+        $responseCode = $datosArray["result"]["error_id"];
+        http_response_code($responseCode);
+    }else{
+        http_response_code(200);
+    }
+    //Imprimimos el json con los datos del usuario guardados
+    echo json_encode($datosArray);
+
+//El metodo PUT se utiliza para modificar datos
+}else if($_SERVER['REQUEST_METHOD'] == "PUT"){
+    //Guardamos los datos recibidos en $postBody
+    $postBody = file_get_contents("php://input");
+    //Mandamos los datos a la funcion put de usuarios.class.php
+    $datosArray = $_usuarios->put($postBody);
+    //Devolvemos un json con la respuesta tanto si hay ido bien como si no
     header('Content-Type: application/json');
     if(isset($datosArray["result"]["error_id"])){
         $responseCode = $datosArray["result"]["error_id"];
@@ -43,21 +62,6 @@ if($_SERVER['REQUEST_METHOD'] == "GET"){
         http_response_code(200);
     }
     echo json_encode($datosArray);
-    
-}else if($_SERVER['REQUEST_METHOD'] == "PUT"){
-      //recibimos los datos enviados
-      $postBody = file_get_contents("php://input");
-      //enviamos datos al manejador
-      $datosArray = $_usuarios->put($postBody);
-        //delvovemos una respuesta 
-     header('Content-Type: application/json');
-     if(isset($datosArray["result"]["error_id"])){
-         $responseCode = $datosArray["result"]["error_id"];
-         http_response_code($responseCode);
-     }else{
-         http_response_code(200);
-     }
-     echo json_encode($datosArray);
 
 }else if($_SERVER['REQUEST_METHOD'] == "DELETE"){
 
