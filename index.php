@@ -21,7 +21,16 @@ $conexion = new conexion;
 </head>
 <body>
 <div  class="container">
-    <h1>Instrucciones API</h1>
+    <h1>API Pedidos</h1>
+    <div class="divbody">
+        <h3>Introducción</h3>
+        <code>
+        Esta API de pedidos es una API de ejemplo de como se podría gestionar una base de datos de pedidos. Abajo están listadas todas las funciones que tiene, el tipo de llamada que se ejecuta y los campos que serán requeridos en el json que enviaremos. Sus funciones son:<br>
+        - <b>/auth</b>: Permite hacer login en la aplicación<br>
+        - <b>/usuarios</b>: Permite gestionar los usuarios que pueden acceder a la aplicación y sus datos<br>
+        
+        </code>
+    </div> 
     <div class="divbody">
         <h3>Auth - login</h3>
         <code>
@@ -40,11 +49,13 @@ $conexion = new conexion;
     <div class="divbody">   
         <h3>Usuarios</h3>
         <code>
+           <b>Listar usuarios</b><br><br>
            GET  /usuarios?page=$numeroPagina
            <br>
            GET  /usuarios?id=$id
         </code>
         <code>
+           <b>Crear usuarios</b><br><br>
            POST  /usuarios
            <br> 
            {
@@ -58,21 +69,25 @@ $conexion = new conexion;
            }
         </code>
         <code>
+           <b>Editar usuarios</b><br><br>
            PUT  /usuarios
            <br> 
            {
             <br> 
-               "nombre" : "",               
-               <br> 
-               "email" : "",                      
-               <br>         
-               "token" : "" ,                -> REQUERIDO        
-               <br>       
                "id" : ""   -> REQUERIDO
                <br>
+               "nombre" : "",               
+               <br> 
+               "email" : "",
+               <br> 
+               "estado" : "",                         
+               <br>         
+               "token" : "" ,                -> REQUERIDO        
+               <br>         
            }
         </code>
         <code>
+           <b>Eliminar usuarios</b><br><br>
            DELETE  /usuarios
            <br> 
            {   

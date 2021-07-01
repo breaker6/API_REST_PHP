@@ -1,5 +1,9 @@
 Esta API Rest está escrita en PHP sin usar ningún tipo de framework, lo que
-le permite ser facilmente escalable a la mayoria de sistemas. Para adaptarla,
+le permite ser facilmente escalable a la mayoria de sistemas. 
+
+Hay que tener en cuenta de primeras que los id de las tablas de la base de datos a los que atacaremos tienen que ser enteros autoincrementales para que no de problemas.
+
+Para adaptarla,
 será necesario hacer unas modificaciones que redactaré a continuación:
 
 - En clases/conexion/config será necesario editar los datos de conexión por los
@@ -34,7 +38,4 @@ En usuarios.php habrá que cambiar el require_once que hace referencia a la clase
 En el caso de clases\usuarios.class.php habrá que ser mas cuidadoso porque aquí se encuentran las consultas
 SQL, con lo que habrá que editarlas correctamente para que funcionen con las tablas que se vayan a usar. Importante leer los comentarios en el codigo para comprobar todo lo quye habría que modificar para adaptarlo a otra tabla.
 
-
-
-En las tablas de la base de datos a los que ataquemos, los id de las tablas
-deberán de ser enteros auto incrementales.
+- El script actualizar_token.php se podrá utilizar como cron para desactivar los token que lleven tiempo activos. En el, se puede modificar la fecha de referencia para desactivarlos. En un principio, no necesitaría tocarse nada de él. Simplemente utilizarlo si se desea para programar la tarea desde el servidor.
