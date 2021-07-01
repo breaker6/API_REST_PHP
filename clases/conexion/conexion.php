@@ -67,7 +67,7 @@ class conexion {
         return $this->convertirUTF8($resultArray);
     }
 
-    //Funcion para ejecutar una consulta a la base de datos (puede ser guardar, actualizar o borrar datos)
+    //Funcion para ejecutar una consulta a la base de datos (puede ser consultar, actualizar o borrar datos)
     public function nonQuery($sqlstring){
         $results = $this->conexion->query($sqlstring);
         return $this->conexion->affected_rows;
