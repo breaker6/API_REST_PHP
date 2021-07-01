@@ -197,7 +197,7 @@ class usuarios extends conexion {
         $_respuestas = new respuestas;
         //Convertimos los datos recibidos en un array asociativo
         $datos = json_decode($json,true);
-
+        
         //Si no hemos recibido el token, daremos un error
         //NOTA: Podriamos omitir la comprobación del token. Para ello, habría que comentar desde la siguiente linea hasta if($arrayToken){ y sus cierres mas abajo
         if(!isset($datos['token'])){
