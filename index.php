@@ -28,6 +28,8 @@ $conexion = new conexion;
         Esta API de pedidos es una API de ejemplo de como se podría gestionar una base de datos de pedidos. Abajo están listadas todas las funciones que tiene, el tipo de llamada que se ejecuta y los campos que serán requeridos en el json que enviaremos. Sus funciones son:<br>
         - <b>/auth</b>: Permite hacer login en la aplicación<br>
         - <b>/usuarios</b>: Permite gestionar los usuarios que pueden acceder a la aplicación y sus datos<br>
+        - <b>/productos</b>: Permite gestionar los productos que se pueden comprar en la aplicacion y sus datos<br>
+        - <b>/pedidos</b>: Permite gestionar los pedidos hechos y las lineas de dichos pedidos<br>
         
         </code>
     </div> 
@@ -82,7 +84,7 @@ $conexion = new conexion;
                <br> 
                "estado" : "",                         
                <br>         
-               "token" : "" ,                -> REQUERIDO        
+               "token" : ""                 -> REQUERIDO        
                <br>         
            }
         </code>
@@ -134,7 +136,7 @@ $conexion = new conexion;
                <br>
                "descripcion" : "",               
                <br> 
-               "precio" : "",
+               "precio" : ""
                <br>        
            }
         </code>
@@ -148,6 +150,90 @@ $conexion = new conexion;
                <br>       
                "id" : ""   -> REQUERIDO
                <br>
+           }
+        </code>
+    </div>
+
+    <div class="divbody">   
+        <h3>Pedidos</h3>
+        <code>
+           <b>Listar pedidos</b><br><br>
+           GET  /pedidos?page=$numeroPagina
+           <br>
+           GET  /pedidos?id=$id
+        </code>
+        <code>
+           <b>Crear pedido</b><br><br>
+           POST  /pedidos
+           <br> 
+           {
+            <br> 
+               "idusuario" : "",               -> REQUERIDO
+               <br> 
+               "direccion" : "",                  -> REQUERIDO    
+               <br>
+               "fecha_pedido" : "",                  -> REQUERIDO    
+               <br> 
+               "observaciones" : "",  
+               <br>                      
+               "token" : ""                 -> REQUERIDO        
+               <br>       
+           }
+        </code>
+        <code>
+           <b>Añadir linea al pedido</b><br><br>
+           POST  /pedidos
+           <br> 
+           {
+            <br> 
+               "idpedido" : "",               -> REQUERIDO
+               <br> 
+               "idproducto" : "",                  -> REQUERIDO    
+               <br>
+               "descuento" : "",   
+               <br> 
+               "observaciones" : "",  
+               <br>                      
+               "token" : ""                 -> REQUERIDO        
+               <br>       
+           }
+        </code>
+        <code>
+           <b>Editar pedido</b><br><br>
+           PUT  /pedidos
+           <br> 
+           {
+            <br> 
+               "idpedido" :" : ""   -> REQUERIDO
+               <br>         
+               "token" : "" ,                -> REQUERIDO  
+               <br>
+               "idusuario" : "",               
+               <br> 
+               "direccion" : "",
+               <br>
+               "fecha_pedido" : "",
+               <br> 
+               "observaciones" : ""
+               <br>    
+           }
+        </code>
+        <code>
+           <b>Editar linea pedido</b><br><br>
+           PUT  /pedidos
+           <br> 
+           {
+            <br> 
+               "idlinea" :" : ""   -> REQUERIDO
+               <br>         
+               "token" : "" ,                -> REQUERIDO  
+               <br>
+               "idproducto" : "",               
+               <br> 
+               "descuento" : "",
+               <br>
+               "observaciones" : ""
+               <br>   
            }
         </code>
     </div>
