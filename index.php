@@ -99,6 +99,59 @@ $conexion = new conexion;
            }
         </code>
     </div>
+
+    <div class="divbody">   
+        <h3>Productos</h3>
+        <code>
+           <b>Listar productos</b><br><br>
+           GET  /productos?page=$numeroPagina
+           <br>
+           GET  /productos?id=$id
+        </code>
+        <code>
+           <b>Crear productos</b><br><br>
+           POST  /productos
+           <br> 
+           {
+            <br> 
+               "descripcion" : "",               -> REQUERIDO
+               <br> 
+               "precio" : "",                  -> REQUERIDO    
+               <br>         
+               "token" : ""                 -> REQUERIDO        
+               <br>       
+           }
+        </code>
+        <code>
+           <b>Editar productos</b><br><br>
+           PUT  /productos
+           <br> 
+           {
+            <br> 
+               "id" : ""   -> REQUERIDO
+               <br>         
+               "token" : "" ,                -> REQUERIDO  
+               <br>
+               "descripcion" : "",               
+               <br> 
+               "precio" : "",
+               <br>        
+           }
+        </code>
+        <code>
+           <b>Eliminar productos</b><br><br>
+           DELETE  /productos
+           <br> 
+           {   
+               <br>    
+               "token" : "",                -> REQUERIDO        
+               <br>       
+               "id" : ""   -> REQUERIDO
+               <br>
+           }
+        </code>
+    </div>
+
 </div>
     
 </body>
