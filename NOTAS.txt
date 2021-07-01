@@ -3,8 +3,7 @@ le permite ser facilmente escalable a la mayoria de sistemas.
 
 Hay que tener en cuenta de primeras que los id de las tablas de la base de datos a los que atacaremos tienen que ser enteros autoincrementales para que no de problemas.
 
-Para adaptarla,
-será necesario hacer unas modificaciones que redactaré a continuación:
+Para adaptarla, será necesario hacer unas modificaciones que redactaré a continuación:
 
 - En clases/conexion/config será necesario editar los datos de conexión por los
 de la base de datos que necesitemos o vayamos a usar. Ahora están preparados
@@ -19,13 +18,13 @@ ver como realizar esta conexión.
 - En clases/auth.class.php serán necesarios varios cambios. La función login esta pensada para recibir un
 json con este formato:
 {
-	"usuario":"usuario@gmail.com",
+	"email":"usuario@gmail.com",
     "password":"aaaaa"
 }
-Si se recibiese un json distinto, habría que modificar esta función modificando $datos['usuario']
+Si se recibiese un json distinto, habría que modificar esta función modificando $datos['email']
 y $datos['password'] escribiendo en lugar de usuario y password los nombres de los valores del json recibido en todos los lugares donde aparecen.
 
-La comprobacion que se hace en if($datos[0]['estado'] == "Activo"){ se debe a que en la tabla de usuarios hay una columna llamada estado en la que guardamos un string, y en el ejemplo hemos elegido guardar Activo o Inactivo. Si se quiere verificar si un usuario esta activo o no de otra manera, habrá que cambiar dicha comparación. Por ejemplo, si dejar ese campo en blanco significa que el usuario está activo, habría que cambiar dicha linea por esta: if($datos[0]['estado'] == ""){
+La comprobacion que se hace en if($datos[0]['estado'] == "Activo"){ se debe a que en la tabla de usuarios hay una columna llamada estado en la que guardamos un string, y en el ejemplo hemos elegido guardar Activo o Inactivo. Si se quiere verificar si un usuario esta activo de otra manera o no hacerlo, habrá que cambiar dicha comparación. Por ejemplo, si dejar ese campo en blanco significa que el usuario está activo, habría que cambiar dicha linea por esta: if($datos[0]['estado'] == ""){
 
 La linea $password = parent::encriptar($password); esta comentada porque en este ejemplo la base de datos no está encriptada. En caso de estarlo, sería necesario encriptar el passord usando esta función o editandola en clases\conexion\conexion.php.
 
@@ -38,4 +37,4 @@ En usuarios.php habrá que cambiar el require_once que hace referencia a la clase
 En el caso de clases\usuarios.class.php habrá que ser mas cuidadoso porque aquí se encuentran las consultas
 SQL, con lo que habrá que editarlas correctamente para que funcionen con las tablas que se vayan a usar. Importante leer los comentarios en el codigo para comprobar todo lo quye habría que modificar para adaptarlo a otra tabla.
 
-- El script actualizar_token.php se podrá utilizar como cron para desactivar los token que lleven tiempo activos. En el, se puede modificar la fecha de referencia para desactivarlos. En un principio, no necesitaría tocarse nada de él. Simplemente utilizarlo si se desea para programar la tarea desde el servidor.
+- El script cron\actualizar_token.php se podrá utilizar como cron para desactivar los token que lleven tiempo activos. En el, se puede modificar la fecha de referencia para desactivarlos. En un principio, no necesitaría tocarse nada de él. Simplemente utilizarlo si se desea para programar la tarea desde el servidor.
