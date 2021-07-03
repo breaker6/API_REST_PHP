@@ -11,7 +11,7 @@ class pedidos extends conexion {
     private $fechapedido = "";
     private $observacionespedido = "";
 
-    private $tablelineas = "pedidos_lineas"; //Nombre de la tabla pedidos
+    private $tablelineas = "pedidos_lineas"; //Nombre de la tabla donde están las lineas de los pedidos
     private $lineaid = "";
     private $productoid = "";
     private $descuento = "";
@@ -315,7 +315,7 @@ class pedidos extends conexion {
         }
     }
 
-    //Funcion para eliminar un producto de la base de datos
+    //Funcion para eliminar un pedido o alguna linea de un pedido de la base de datos
     public function delete($json){
         //Instanciamos la clase respuestas
         $_respuestas = new respuestas;
@@ -330,26 +330,41 @@ class pedidos extends conexion {
             $this->token = $datos['token'];
             $arrayToken =   $this->buscarToken();
             if($arrayToken){
-
-                //Si no hemos recibido el id, daremos un error
-                if(!isset($datos['id'])){
+                //Si no hemos recibido ni el id del pedido ni el id de la linea a modificar, daremos un error
+                if(!isset($datos['idpedido']) && !isset($datos['idlinea'])){
                     return $_respuestas->error_400();
-                //Si tenemos el id, verificaremos el resto de campos que hemos recibido 
-                }else{
-                    $this->productoid = $datos['id'];
-                    //Ejecutamos la eliminación del producto
-                    $resp = $this->eliminarProducto();
-                    
+                //Si tenemos el id del pedido, lo guardaremos en el atributo pedidoid de la clase
+                }else if(isset($datos['idpedido'])){
+                    $this->pedidoid = $datos['idpedido'];
+                    //Ejecutamos la eliminación del pedido y todas sus lineas
+                    $resp = $this->eliminarPedido();
+                        
                     //Si hemos recibido respuesta, es que ha ido todo bien. Devolvemos el OK
                     if(isset($resp)){
                         $respuesta = $_respuestas->response;
                         $respuesta["result"] = array(
-                            "productoId" => $this->productoid
+                            "pedidoId" => $this->pedidoid
                         );
                         return $respuesta;
                     }else{
                         return $_respuestas->error_500();
                     }
+                //Si tenemos el id de la linea, lo guardaremos en el atributo lineaid de la clase    
+                }else if(isset($datos['idlinea'])){     
+                    $this->lineaid = $datos['idlinea'];
+                    //Ejecutamos la eliminación de la linea del pedido
+                    $resp = $this->eliminarLineaPedido();
+                        
+                    //Si hemos recibido respuesta, es que ha ido todo bien. Devolvemos el OK
+                    if(isset($resp)){
+                        $respuesta = $_respuestas->response;
+                        $respuesta["result"] = array(
+                            "lineaId" => $this->lineaid
+                        );
+                        return $respuesta;
+                    }else{
+                        return $_respuestas->error_500();
+                    } 
                 }
             //else de if($arrayToken){
             }else{
@@ -358,12 +373,34 @@ class pedidos extends conexion {
         }//else de if(!isset($datos['token'])){ 
     }
 
-    //Función que eliminará al producto y devolverá su id
-    private function eliminarProducto(){
-        $query = "DELETE FROM " . $this->table . " WHERE id= '" . $this->productoid . "'";
-        $resp = parent::nonQuery($query);
-        if($resp >= 1 ){
-            return $resp;
+    //Función que eliminará el pedido y todas sus lineas
+    private function eliminarPedido(){
+        //Eliminamos todas las lineas asociadas al pedido
+        $querylineas = "DELETE FROM " . $this->tablelineas . " WHERE idpedido= '" . $this->pedidoid . "'";
+        $resplineas = parent::nonQuery($querylineas);
+        //Si recibimos un 0 o numero mayor, es que no ha dado error. Continuamos con el pedido
+        if($resplineas >= 0 ){
+            //Eliminamos el pedido
+            $querypedidos = "DELETE FROM " . $this->tablepedidos . " WHERE id= '" . $this->pedidoid . "'";
+            $resppedidos = parent::nonQuery($querypedidos);
+            //Devolvemos el número de filas afectadas
+            if($resppedidos >= 1){
+                 return $resppedidos;
+            }else{
+                return 0;
+            }
+        }else{
+            return 0;
+        }
+    }
+
+    //Función que eliminará una linea del pedido
+    private function eliminarLineaPedido(){
+        $querylineas = "DELETE FROM " . $this->tablelineas . " WHERE id= '" . $this->lineaid . "'";
+        $resp = parent::nonQuery($querylineas);
+        //Devolvemos el numero de lineas afectadas
+        if($resp >= 1){
+             return $resp;
         }else{
             return 0;
         }

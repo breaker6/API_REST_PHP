@@ -38,45 +38,33 @@ class usuarios extends conexion {
         //Convertimos los datos recibidos en un array asociativo
         $datos = json_decode($json,true);
 
-        //Si no hemos recibido el token, daremos un error
-        //NOTA: Podriamos omitir la comprobación del token. Para ello, habría que comentar desde la siguiente linea hasta if($arrayToken){ y sus cierres mas abajo
-        if(!isset($datos['token'])){
-            return $_respuestas->error_401();
+        //Comprobamos si hemos recibido los datos requeridos. Si no, daremos un error
+        if(!isset($datos['nombre']) || !isset($datos['email'])){
+            return $_respuestas->error_400();
+        //Si los hemos recibido, los guardaremos en los atributos de la clase
         }else{
-            $this->token = $datos['token'];
-            $arrayToken =   $this->buscarToken();
-            if($arrayToken){
-                //Comprobamos si hemos recibido los datos requeridos. Si no, daremos un error
-                if(!isset($datos['nombre']) || !isset($datos['email'])){
-                    return $_respuestas->error_400();
-                //Si los hemos recibido, los guardaremos en los atributos de la clase
-                }else{
-                    $this->nombre = $datos['nombre'];
-                    $this->email = $datos['email'];
-                    //if(isset($datos['telefono'])) { $this->telefono = $datos['telefono']; }
-                    //if(isset($datos['direccion'])) { $this->direccion = $datos['direccion']; }
-                    //if(isset($datos['codigoPostal'])) { $this->codigoPostal = $datos['codigoPostal']; }
-                    //if(isset($datos['genero'])) { $this->genero = $datos['genero']; }
-                    //if(isset($datos['fechaNacimiento'])) { $this->fechaNacimiento = $datos['fechaNacimiento']; }
-                    //Insertamos el usuario
-                    $resp = $this->insertarUsuario();
-                    //Si recibimos respuesta, la devolvemos (debe ser el id insertado)
-                    if($resp){
-                        $respuesta = $_respuestas->response;
-                        $respuesta["result"] = array(
-                            "usuarioId" => $resp
-                        );
-                        return $respuesta;
-                    //Si no hemos recibido respuesta, probablemente haya habido algun error al hacer el insert. Mostraremos el error de error interno
-                    }else{
-                        return $_respuestas->error_500();
-                    }
-                }
-            //else de if($arrayToken){
+            $this->nombre = $datos['nombre'];
+            $this->email = $datos['email'];
+            //if(isset($datos['telefono'])) { $this->telefono = $datos['telefono']; }
+            //if(isset($datos['direccion'])) { $this->direccion = $datos['direccion']; }
+            //if(isset($datos['codigoPostal'])) { $this->codigoPostal = $datos['codigoPostal']; }
+            //if(isset($datos['genero'])) { $this->genero = $datos['genero']; }
+            //if(isset($datos['fechaNacimiento'])) { $this->fechaNacimiento = $datos['fechaNacimiento']; }
+            //Insertamos el usuario
+            $resp = $this->insertarUsuario();
+            //Si recibimos respuesta, la devolvemos (debe ser el id insertado)
+            if($resp){
+                $respuesta = $_respuestas->response;
+                $respuesta["result"] = array(
+                    "usuarioId" => $resp
+                );
+                return $respuesta;
+            //Si no hemos recibido respuesta, probablemente haya habido algun error al hacer el insert. Mostraremos el error de error interno
             }else{
-                return $_respuestas->error_401("El Token que envio es invalido o ha caducado");
+                return $_respuestas->error_500();
             }
-        }//else de if(!isset($datos['token'])){
+        }
+        
     }
     
     //Funcion que hará la inserción del usuario y devolvera el id del usuario insertado
