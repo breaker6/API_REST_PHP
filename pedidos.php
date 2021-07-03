@@ -67,12 +67,21 @@ if($_SERVER['REQUEST_METHOD'] == "GET"){
         //Recogemos los headers que pueden haber sido enviados
         $headers = getallheaders();
         //En caso de haberlos, recogeremos los datos de ellos
-        if(isset($headers["token"]) && isset($headers["id"])){
-            //Metemos los datos recibidos en un array y los convertimos a un json
-            $send = [
-                "token" => $headers["token"],
-                "id" =>$headers["id"]
-            ];
+        if(isset($headers["token"])){
+        	if (isset($headers["idpedido"])){
+	            //Metemos los datos recibidos en un array y los convertimos a un json
+	            $send = [
+	                "token" => $headers["token"],
+	                "idpedido" =>$headers["idpedido"]
+	            ];
+	        }
+	        if (isset($headers["idlinea"])){
+	            //Metemos los datos recibidos en un array y los convertimos a un json
+	            $send = [
+	                "token" => $headers["token"],
+	                "idlinea" =>$headers["idlinea"]
+	            ];
+	        }
             $postBody = json_encode($send);
         //Si no hay headers, los cogeremos desde el body
         }else{
@@ -81,7 +90,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET"){
         }
         
         //Mandamos los datos a la funcion delete de productos.class.php
-        $datosArray = $_productos->delete($postBody);
+        $datosArray = $_pedidos->delete($postBody);
         //delvovemos una respuesta 
         header('Content-Type: application/json');
         if(isset($datosArray["result"]["error_id"])){

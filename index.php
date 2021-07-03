@@ -204,9 +204,9 @@ $conexion = new conexion;
            <br> 
            {
             <br> 
-               "idpedido" :" : ""   -> REQUERIDO
+               "idpedido" : "",   -> REQUERIDO
                <br>         
-               "token" : "" ,                -> REQUERIDO  
+               "token" : "",                -> REQUERIDO  
                <br>
                "idusuario" : "",               
                <br> 
@@ -224,9 +224,9 @@ $conexion = new conexion;
            <br> 
            {
             <br> 
-               "idlinea" :" : ""   -> REQUERIDO
+               "idlinea" : "",  -> REQUERIDO
                <br>         
-               "token" : "" ,                -> REQUERIDO  
+               "token" : "",                -> REQUERIDO  
                <br>
                "idproducto" : "",               
                <br> 
@@ -234,6 +234,30 @@ $conexion = new conexion;
                <br>
                "observaciones" : ""
                <br>   
+           }
+        </code>
+        <code>
+           <b>Eliminar pedido</b><br><br>
+           DELETE  /pedidos
+           <br> 
+           {
+            <br> 
+               "idpedido : "",   -> REQUERIDO
+               <br>         
+               "token" : "",                -> REQUERIDO  
+               <br>    
+           }
+        </code>
+        <code>
+           <b>Eliminar linea del pedido</b><br><br>
+           DELETE  /pedidos
+           <br> 
+           {
+            <br> 
+               "idlinea : "",   -> REQUERIDO
+               <br>         
+               "token" : "",                -> REQUERIDO  
+               <br>    
            }
         </code>
     </div>
