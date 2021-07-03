@@ -3,6 +3,10 @@ le permite ser facilmente escalable a la mayoria de sistemas.
 
 Hay que tener en cuenta de primeras que los id de las tablas de la base de datos a los que atacaremos tienen que ser enteros autoincrementales para que no de problemas.
 
+Para probar las llamadas recomiendo usar la aplicación RestEasy de google chrome. Solo habría que buscarla e instalarla y acceder a ella abriendo una ventana nueva de chrome y escribiendo esta url:
+
+chrome-extension://nojelkgnnpdmhpankkiikipkmhgafoch/index.html#
+
 Para adaptarla, será necesario hacer unas modificaciones que redactaré a continuación:
 
 - En clases/conexion/config será necesario editar los datos de conexión por los
